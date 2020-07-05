@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" class="dark-gray bg-white sans-serif lh-copy">
+<title>Servers - OpenBSD Amsterdam</title>
+<meta charset="UTF-8">
+<meta name="generator" content="romanzolotarev.com/ssg">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="discountegg" content="OBSD-EGG-2020">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="stylesheet" href="style.css">
+<body class="mw7 w-100 center pa3">
+<div class="cf">
+<div class="fl w-100 w-50-l w-50-m"><a href="index.html" title="OpenBSD Amsterdam Logo"><img class="w3 br-100" src="images/logo.png" alt="OpenBSD Amsterdam Logo"></a></div>
+<div class="fl w-100 w-50-l w-50-m mt2 tr"><a href="servers.html">370 VMs deployed</a>&nbsp;&#x1F421;</div>
+</div>
+<h1 id="Servers">Servers</h1>
+
+<pre class="clean">
+
+       ▲      ▲
+       │      │
+      10G    10G
+     ┌─┴──────┴─┐       ┌──────────┐      ┌───────────┐ 
+     │          │       │          │──1G──│  Server 1 │ 
+     │          │       │          │      └───────────┘ 
+     │  Router  │──10G──│  Switch  │           ...
+     │          │       │          │      ┌───────────┐ 
+     │          │       │          │──1G──│  Server N │ 
+     └──────────┘       └──────────┘      └───────────┘ 
+
+</pre>
+
+<p class="f7">
+The images are coming from a different <a href="https://ops.high5.nl">host</a>, they might trigger your adblocker. Generated with <a href="blog/rrdtool-looks-nicer.html">RRDtool</a>.
+</p>
+
+<h2 id="Server%201">Server 1</h2>
+
+<div class="cf">
+<img class="w-100 w-50-l fl" src="https://ops.high5.nl/obsda.ms/s1.obsda.ms-cpu.png">
+<img class="w-100 w-50-l fl" src="https://ops.high5.nl/obsda.ms/s1.obsda.ms-12.png">
+</div>
+
+<p><a href="http://s1.obsda.ms">s1.obsda.ms</a></p>
+
+<pre class="clean">
+10 VMs
+SuperMicro w/ Xeon(R) CPU E3-1220 V2 @ 3.10GHz
+8G RAM
+Areca ARC-1212 (Raid5)
+2 x Samsung SSD 850 EVO 250G
+2 x Samsung SSD 860 EVO 250G
+</pre>
+
+<h2 id="Server%202">Server 2</h2>
+
+<div class="cf">
+<img class="w-100 w-50-l fl" src="https://ops.high5.nl/obsda.ms/s2.obsda.ms-cpu.png">
+<img class="w-100 w-50-l fl" src="https://ops.high5.nl/obsda.ms/s2.obsda.ms-6.png">
+</div>
+
+<p><a href="http://s3.obsda.ms">s2.obsda.ms</a></p>
+
+<pre class="clean">
+40 VMs
+SuperMicro w/ Intel(R) Xeon(R) CPU E5-2620 v3 @ 2.40GHz
+32G RAM
+LSI 9260-8i
+2 x Intel SSD
+2 x Seagate ST3000LM024
+</pre>
+
+<h2 id="Server%203">Server 3</h2>
+
+<div class="cf">
+<img class="w-100 w-50-l fl" src="https://ops.high5.nl/obsda.ms/s3.obsda.ms-cpu.png">
+<img class="w-100 w-50-l fl" src="https://ops.high5.nl/obsda.ms/s3.obsda.ms-12.png">
+</div>
+
+<p><a href="http://s3.obsda.ms">s3.obsda.ms</a></p>
+
+<pre class="clean">
+40 VMs
+Dell PowerEdge R610 w/ 2 x Intel(R) Xeon(R) CPU X5675 @ 3.07GHz
+64G RAM
+Dell PERC 6/i
+2 x 146GB 10K SAS
+4 x 900GB 10K SAS
+</pre>
+
+<h2 id="Server%204">Server 4</h2>
+
+<div class="cf">
+<img class="w-100 w-50-l fl" src="https://ops.high5.nl/obsda.ms/s4.obsda.ms-cpu.png">
+<img class="w-100 w-50-l fl" src="https://ops.high5.nl/obsda.ms/s4.obsda.ms-12.png">
+</div>
+
+<p><a href="http://s4.obsda.ms">s4.obsda.ms</a></p>
+
+<pre class="clean">
+40 VMs
+Dell PowerEdge R610 w/ 2 x Intel(R) Xeon(R) CPU X5670 @ 2.93GHz
+64G RAM
+Dell PERC 6/i
+2 x 146GB 10K SAS
+4 x 900GB 10K SAS
+</pre>
+
+<h2 id="Server%205">Server 5</h2>
+
+<div class="cf">
+<img class="w-100 w-50-l fl" src="https://ops.high5.nl/obsda.ms/s5.obsda.ms-cpu.png">
+<img class="w-100 w-50-l fl" src="https://ops.high5.nl/obsda.ms/s5.obsda.ms-12.png">
+</div>
+
+<p><a href="http://s5.obsda.ms">s5.obsda.ms</a></p>
+
+<pre class="clean">
+40 VMs
+Dell PowerEdge R610 w/ 2 x Intel(R) Xeon(R) CPU X5675 @ 3.07GHz
+64G RAM
+Dell PERC 6/i
+2 x 146GB 10K SAS
+4 x 900GB 10K SAS
+</pre>
+
+<h2 id="Server%206">Server 6</h2>
+
+<div class="cf">
+<img class="w-100 w-50-l fl" src="https://ops.high5.nl/obsda.ms/s6.obsda.ms-cpu.png">
+<img class="w-100 w-50-l fl" src="https://ops.high5.nl/obsda.ms/s6.obsda.ms-12.png">
+</div>
+
+<p><a href="http://s6.obsda.ms">s6.obsda.ms</a></p>
+
+<pre class="clean">
+40 VMs
+Dell PowerEdge R610 w/ 2 x Intel(R) Xeon(R) CPU X5675 @ 3.07GHz
+64G RAM
+Dell PERC 6/i
+2 x 146GB 10K SAS
+4 x 900GB 10K SAS
+</pre>
+
+<h2 id="Server%207">Server 7</h2>
+
+<div class="cf">
+<img class="w-100 w-50-l fl" src="https://ops.high5.nl/obsda.ms/s7.obsda.ms-cpu.png">
+<img class="w-100 w-50-l fl" src="https://ops.high5.nl/obsda.ms/s7.obsda.ms-12.png">
+</div>
+
+<p><a href="http://s7.obsda.ms">s7.obsda.ms</a></p>
+
+<pre class="clean">
+40 VMs
+Dell PowerEdge R610 w/ 2 x Intel(R) Xeon(R) CPU X5675 @ 3.07GHz
+64G RAM
+Dell PERC 6/i
+2 x 146GB 10K SAS
+4 x 900GB 10K SAS
+</pre>
+
+<h2 id="Server%208">Server 8</h2>
+
+<div class="cf">
+<img class="w-100 w-50-l fl" src="https://ops.high5.nl/obsda.ms/s8.obsda.ms-cpu.png">
+<img class="w-100 w-50-l fl" src="https://ops.high5.nl/obsda.ms/s8.obsda.ms-12.png">
+</div>
+
+<p><a href="http://s8.obsda.ms">s8.obsda.ms</a></p>
+
+<pre class="clean">
+40 VMs
+Dell PowerEdge R610 w/ 2 x Intel(R) Xeon(R) CPU X5675 @ 3.07GHz
+64G RAM
+Dell PERC 6/i
+2 x 146GB 10K SAS
+4 x 900GB 10K SAS
+</pre>
+
+<h2 id="Server%209">Server 9</h2>
+
+<div class="cf">
+<img class="w-100 w-50-l fl" src="https://ops.high5.nl/obsda.ms/s9.obsda.ms-cpu.png">
+<img class="w-100 w-50-l fl" src="https://ops.high5.nl/obsda.ms/s9.obsda.ms-12.png">
+</div>
+
+<p><a href="http://s9.obsda.ms">s9.obsda.ms</a></p>
+
+<pre class="clean">
+40 VMs
+Dell PowerEdge R610 w/ 2 x Intel(R) Xeon(R) CPU X5675 @ 3.07GHz
+64G RAM
+Dell PERC 6/i
+2 x 146GB 10K SAS
+2 x 900GB 10K SAS
+</pre>
+
+<h2 id="Server%2010">Server 10</h2>
+
+<div class="cf">
+<img class="w-100 w-50-l fl" src="https://ops.high5.nl/obsda.ms/s10.obsda.ms-cpu.png">
+<img class="w-100 w-50-l fl" src="https://ops.high5.nl/obsda.ms/s10.obsda.ms-12.png">
+</div>
+
+<p><a href="http://s10.obsda.ms">s10.obsda.ms</a></p>
+
+<pre class="clean">
+40 VMs
+Dell PowerEdge R610 w/ 2 x Intel(R) Xeon(R) CPU X5690 @ 3.47GHz
+64G RAM
+Dell H700 Mini
+2 x 146GB 10K SAS
+2 x 900GB 10K SAS
+</pre>
+
+<h2 id="Server%2011">Server 11</h2>
+
+<div class="cf">
+<img class="w-100 w-50-l fl" src="https://ops.high5.nl/obsda.ms/s11.obsda.ms-cpu.png">
+<img class="w-100 w-50-l fl" src="https://ops.high5.nl/obsda.ms/s11.obsda.ms-12.png">
+</div>
+
+<p><a href="http://s11.obsda.ms">s11.obsda.ms</a></p>
+
+<pre class="clean">
+40 VMs
+Dell PowerEdge R610 w/ 2 x Intel(R) Xeon(R) CPU X5675 @ 3.07GHz
+64G RAM
+Dell PERC 6/i
+2 x 146GB 10K SAS
+2 x 900GB 10K SAS
+</pre>
+<p class="footer f7 mt4">
+&copy; 2018&ndash;2020 OpenBSD Amsterdam is a project of <a href="https://high5.nl/">High5!</a>
+</body>
+</html>

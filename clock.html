@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" class="dark-gray bg-white sans-serif lh-copy">
+<title>Clock - OpenBSD Amsterdam</title>
+<meta charset="UTF-8">
+<meta name="generator" content="romanzolotarev.com/ssg">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="discountegg" content="OBSD-EGG-2020">
+<link rel="icon" type="image/png" href="https://openbsd.amsterdam/favicon.png">
+<link rel="stylesheet" href="https://openbsd.amsterdam/style.css">
+<body class="mw7 w-100 center pa3">
+<div class="cf">
+<div class="fl w-100 w-50-l w-50-m"><a href="https://openbsd.amsterdam/" title="OpenBSD Amsterdam Logo"><img class="w3 br-100" src="https://openbsd.amsterdam/images/logo.png" alt="OpenBSD Amsterdam Logo"></a></div>
+<div class="fl w-100 w-50-l w-50-m mt2 tr"><a href="https://openbsd.amsterdam/servers.html">370 VMs deployed</a>&nbsp;&#x1F421;</div>
+</div>
+<h1 id="Clock">Clock</h1>
+
+<p class="quote">&#8220;So, there is a problem with accounting.
+Here's the long and short of it.</p>
+
+<p>The host runs at <code>HZ</code> ticks per second. Unless you changed it (and
+you likely did not), that&#39;s 100 ticks per second. This means the
+smallest granularity of time that can be quantized inside the VM
+is &#34;slightly less&#34; than 100 ticks per second. And of course, you
+can&#39;t fire 100 ticks into the guest (for each guest) if the host
+itself is only receiving 100 opportunities to do that per second.</p>
+
+<p>Similarly, each RTC in the guest expects a periodic timer firing
+at 128 Hz.  Clearly <em>that</em> can&#39;t be accomplished if the host itself
+is only scheduling at 100 Hz.</p>
+
+<p>What this leads to is errors in accounting since the guest kernels
+don&#39;t have a consistent view of time. What you&#39;ll likely see is odd
+numbers for the &#34;rate&#34; column in <code>vmstat -zi</code>.</p>
+
+<p>This is fairly harmless, but could be contributing to the &#34;87%&#34;
+interrupt number. I bet you actually aren&#39;t running 87% interrupt
+load there, but the accounting is confused because of the skewed
+timer.</p>
+
+<p>Some ideas:</p>
+
+<ol start="1">
+<li><p>Update to <code>-current</code>, I fixed some of the egergious problems in
+asserted PIC lines in slovenia last month. (There are still more
+to fix though).</p></li>
+<li><p><em>As an experiment on a spare machine</em> (if you have one), build
+a HOST kernel using <code>HZ=1000</code> (this can be set in sys&#47;conf&#47;param.c
+before make config), or use the <code>-DHZ=xxx</code> build parameter.</p></li>
+<li><p>Boot to that kernel on the host and verify you&#39;re getting
+<code>1000 * ncpus</code> &#34;clock&#34; interrupts via <code>vmstat -zi</code> (again, on the HOST):</p>
+
+<pre><code>irq0&#47;clock      14398951    3999
+</code></pre>
+
+<p><em>Example for my 4 CPU machine</em></p></li>
+</ol>
+
+<p>Use regular 100 HZ kernels in the guest, and you should see some
+of these issues go away.</p>
+
+<p>So, why don&#39;t we make 1,000 Hz the default? Well, consider you run a
+1,000 Hz host and a 1,000 Hz guest ... you&#39;re back in the same problem
+again. What really is needed here is a deadline scheduler (something
+like Linux&#39;s tickless model) to handle arbitrary guest timer
+granularities. This is hard and is something dlg@ and I have been
+working on but it&#39;s not ready. A 1,000 Hz (or even 2,000 Hz) host is
+the stopgap measure until that&#39;s done.</p>
+
+<p>Again, aside from cosmetic issues, I don&#39;t think this is causing
+you or the users any real pain, just wanted to explain what I think
+is going on.&#8221;</p>
+
+<hr/>
+
+<p><img class="w3 br-100" src="ref/ml.jpg"><br></p>
+
+<p><strong>Mike Larkin</strong><br>
+<em>OpenBSD Developer</em><br>
+<a href="https://twitter.com/mlarkin2012">@mlarkin2012</a></p>
+
+<hr/>
+
+<p>See also
+<a href="https://man.openbsd.org/vmstat.8">vmstat(8)</a>,
+<a href="https://man.openbsd.org/vmm.4">vmm(4)</a>,
+<a href="https://man.openbsd.org/vmd.8">vmd(8)</a></p>
+<p class="footer f7 mt4">
+&copy; 2018&ndash;2020 OpenBSD Amsterdam is a project of <a href="https://high5.nl/">High5!</a>
+</body>
+</html>

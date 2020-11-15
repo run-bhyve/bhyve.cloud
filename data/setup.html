@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en" class="dark-gray bg-white sans-serif lh-copy">
+<title>The setup - OpenBSD Amsterdam</title>
+<meta charset="UTF-8">
+<meta name="generator" content="romanzolotarev.com/ssg">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="discountegg" content="OBSD-EGG-2020">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="stylesheet" href="/style.css">
+<body class="mw7 w-100 center pa3">
+<div class="cf">
+<div class="fl w-100 w-50-l w-50-m"><a href="/" title="OpenBSD Amsterdam Logo"><img class="w3 br-100" src="/images/logo.png" alt="OpenBSD Amsterdam Logo"></a></div>
+<div class="fl w-100 w-50-l w-50-m mt2 tr"><a href="servers.html">370 VMs deployed</a>&nbsp;&#x1F421;</div>
+</div>
+<h1 id="The%20setup">The setup</h1>
+
+<p>For all the people who want to know what our setup looks like. Below
+is a write-up of our setup and configuration. There aren&#39;t any
+packages installed on the servers running the Virtual Machines.</p>
+
+<h2 id="The%20building%20blocks">The building blocks</h2>
+
+<p>As with most things <a href="https://openbsd.org/">OpenBSD</a> you can build almost anything with a
+base install alone. Our setup is no different! The building blocks
+which <em>OpenBSD Amsterdam</em> is built on are:</p>
+
+<ul>
+<li><a href="/setup.html#vmm(4)/vmd(8)">vmm(4)&#47;vmd(8)</a></li>
+<li><a href="/setup.html#dhcpd(8)">dhcpd(8)</a></li>
+<li><a href="/setup.html#autoinstall(8)">autoinstall(8)</a></li>
+<li><a href="/setup.html#siteXX.tgz">siteXX.tgz</a></li>
+<li><a href="/setup.html#httpd(8)">httpd(8)</a></li>
+<li><a href="/setup.html#perl(1)">perl(1)</a></li>
+<li><a href="/setup.html#sensorsd(8)">sensorsd(8)</a></li>
+</ul>
+
+<p>The building blocks that are also needed are <a href="https://man.openbsd.org/pf.4">pf(4)</a>, <a href="https://man.openbsd.org/bridge.4">bridge(4)</a>,
+<a href="https://man.openbsd.org/tap.4">tap(4)</a> and in our case <a href="https://man.openbsd.org/vlan.4">vlan(4)</a>.</p>
+
+<p>All the VM configuration is stored in seperate files with information
+provided via the <a href="/contact.html">contact form</a>.</p>
+
+<ul>
+<li>VM Name</li>
+<li>Dedicated IP address (<a href="https://man.openbsd.org/dhcpd.8">dhcpd(8)</a>)</li>
+<li>Dedicated IPv6 address (&#47;64)</li>
+<li>Hostname</li>
+<li>Username</li>
+<li>SSH public key</li>
+</ul>
+
+<p>The configuation files which are generated:</p>
+
+<ul>
+<li><a href="https://man.openbsd.org/vm.conf.5">vm.conf(5)</a></li>
+<li><a href="https://man.openbsd.org/dhcpd.conf.5">dhcpd.conf(5)</a></li>
+<li>&#60;MAC address&#62;-install.conf (<a href="https://man.openbsd.org/autoinstall.8">autoinstall(8)</a>)</li>
+</ul>
+
+<h2 id="vmm(4)&amp;#47;vmd(8)">vmm(4)&#47;vmd(8)</h2>
+
+<p>It all starts, of course, with <a href="https://man.openbsd.org/vmm.4">vmm(4)</a>&#47;<a href="https://man.openbsd.org/vmd.8">vmd(8)</a> and <a href="https://man.openbsd.org/vm.conf.5">vm.conf(5)</a>.
+Our <a href="https://man.openbsd.org/vm.conf.5">vm.conf(5)</a> looks something like:</p>
+
+<pre><code>socket owner :vmdusers
+
+switch &#34;uplink_vlan42&#34; {
+    interface bridge42
+}
+
+vm &#34;&#60;vm-name&#62;&#34; {
+    disable
+    owner &#60;user&#62;
+    disk &#34;&#47;var&#47;vmm&#47;&#60;vm-name&#62;.qcow2&#34;
+    interface tap {
+        switch &#34;uplink_vlan42&#34;
+        lladdr fe:e1:bb:d1:c8:01
+    }
+}
+</code></pre>
+
+<p><strong><a href="https://cvsweb.openbsd.org/src/usr.sbin/vmd/vmd.c?rev=1.87&amp;content-type=text/x-cvsweb-markup">socket owner</a></strong> was introduced in OpenBSD 6.4. It provides the
+option to change the owner of <code>vmd.sock</code>.</p>
+
+<p>This is useful when multiple users need to control their own VM
+without adding them to group <code>:wheel</code>, the default owner.</p>
+
+<p>A statically assigned MAC address (<strong>lladdr</strong>) is generated when a
+new VM is installed based on a MAC prefix assigned to the host.
+This to make the installation of a new VM easier with <a href="https://man.openbsd.org/autoinstall.8">autoinstall(8)</a>
+in combination with <a href="https://man.openbsd.org/dhcpd.8">dhcpd(8)</a>.</p>
+
+<p>In order to make sure we have enough <a href="https://man.openbsd.org/tap.4">tap(4)</a> interfaces, by default
+there are four interfaces present (<code>tap0</code> .. <code>tap3</code>),
+we run the following command on a new server:</p>
+
+<pre>
+# <b>cd /dev</b>
+# <b>for i in $(jot 50 4 50); do sh MAKEDEV tap$i; done</b>
+#
+</pre>
+
+<p>When running in a large layer 2 domain you might need to increase
+the arpq, which is set to 50 by default. On most hosts we increased
+it to 1024.</p>
+
+<pre>
+# <b>sysctl net.inet.ip.arpq.maxlen=1024</b>
+net.inet.ip.arpq.maxlen: 50 -> 1024
+#
+</pre>
+
+<h2 id="dhcpd(8)">dhcpd(8)</h2>
+
+<p>Our <a href="https://man.openbsd.org/dhcpd.conf.5">dhcpd.conf(5)</a> is per <a href="https://man.openbsd.org/vmd.8">vmd(8)</a> server.</p>
+
+<pre><code>option domain-name &#34;openbsd.amsterdam&#34;;
+option domain-name-servers &#60;dns&#62;;
+
+subnet &#60;ip-space&#62; netmask 255.255.255.0 {
+    option routers &#60;default-gateway-ipv4&#62;;
+    server-name &#34;serverX.openbsd.amsterdam&#34;;
+    range &#60;start-ip end-ip&#62;;
+
+    host &#60;vm-name&#62; {
+        hardware ethernet fe:e1:bb:d1:c8:01;
+        fixed-address &#60;assigned-ipv4&#62;;
+        filename &#34;auto_install&#34;;
+        option host-name &#34;&#60;vm-name&#62;&#34;;
+    }
+}
+</code></pre>
+
+<h2 id="autoinstall(8)">autoinstall(8)</h2>
+
+<p>When a new VM is being created <a href="https://man.openbsd.org/autoinstall.8">autoinstall(8)</a> is used for the
+installation of the VM. Per VM a config file is created based on
+the statically assigned MAC address. For example:</p>
+
+<p>&#47;var&#47;www&#47;htdocs&#47;&#60;install&#62;&#47;fe:e1:bb:d1:c8:01-install.conf</p>
+
+<pre><code># &#60;user&#62; install.conf
+System hostname = &#60;hostname&#62;
+Password for root = &#60;pwd&#62;
+Which speed should com0 = 115200
+Network interfaces = vio0
+IPv4 address for vio0 = dhcp
+IPv6 address for vio0 = &#60;assigned-ipv6&#62;
+IPv6 default router = &#60;default-gateway-ipv6&#62;
+Setup a user = &#60;user&#62;
+Password for user = &#60;pwd&#62;
+Public ssh key for user = ssh-ed25519 AAAA...TxlrE5 &#60;comment&#62; &#60;pwd&#62;
+Which disk is the root disk = sd0
+What timezone are you in = Europe&#47;Amsterdam
+Location of sets = http
+Server = server.openbsd.amsterdam
+Set name(s) = +site*
+Continue anyway = yes
+Continue without verification = yes
+</code></pre>
+
+<h2 id="siteXX.tgz">siteXX.tgz</h2>
+
+<p>We are using <a href="https://www.openbsd.org/faq/faq4.html#site">siteXX.tgz</a> to post-configure a newly created VM.
+This also includes the <a href="https://www.openbsd.org/faq/faq4.html#site">install.site</a> file to create <a href="https://man.openbsd.org/rc.firsttime.8">rc.local(8)</a>
+and to add <a href="https://man.openbsd.org/syspatch.8">syspatch(8)</a> to <a href="https://man.openbsd.org/rc.firsttime.8">rc.firsttime(8)</a></p>
+
+<p>Current files and functions are:</p>
+
+<p><a href="http://man.openbsd.org/installurl.5">installurl(5)</a>:</p>
+
+<pre><code>https:&#47;&#47;cdn.openbsd.org&#47;pub&#47;OpenBSD
+</code></pre>
+
+<p><a href="http://man.openbsd.org/rc.conf.local.8">rc.conf.local(8)</a>:</p>
+
+<pre><code>sndiod_flags=NO
+</code></pre>
+
+<p><a href="http://man.openbsd.org/sysmerge.8">sysmerge(8)</a>.ignore:</p>
+
+<pre><code>&#47;etc&#47;ttys
+</code></pre>
+
+<p><a href="https://www.openbsd.org/faq/faq4.html#site">install.site</a>:</p>
+
+<pre><code>echo &#34;&#47;usr&#47;sbin&#47;syspatch &#38;&#38; touch &#47;etc&#47;rc.local.forcereboot&#34; &#62;&#62; &#47;etc&#47;rc.firsttime
+</code></pre>
+
+<p><a href="https://man.openbsd.org/rc.firsttime.8">rc.local(8)</a>:</p>
+
+<pre><code>if [ -r &#47;etc&#47;rc.local.forcereboot ]; then
+    rm -f &#47;etc&#47;rc.local.forcereboot
+    printf &#39;\n*** Reboot after CPU microcode&#47;OS updates\n\n&#39;
+    sleep 2
+    reboot
+fi
+</code></pre>
+
+<p>Hat tip to <a href="https://twitter.com/sthen_/status/1224313315725336576">Stuart Henderson</a></p>
+
+<h2 id="httpd(8)">httpd(8)</h2>
+
+<p>Since OpenBSD comes with <a href="https://man.openbsd.org/httpd.8">httpd(8)</a> in base we are using it to serve
+the &#60;MAC address&#62;-install.conf files needed for <a href="https://man.openbsd.org/autoinstall.8">autoinstall(8)</a>
+with a minimal config.</p>
+
+<pre><code>server &#34;default&#34; {
+    listen on * port 80
+    root &#34;&#47;htdocs&#47;&#60;install&#62;&#34;
+    location &#34;&#47;pub&#47;OpenBSD&#47;6.7&#47;amd64&#47;*&#34; {
+        root &#34;&#47;htdocs&#47;6.7&#34;
+        request strip 4
+        directory { auto index }
+    }
+}
+</code></pre>
+
+<h2 id="perl(1)">perl(1)</h2>
+
+<p>The text files used to capture all the VM data is processed by a
+perl script, <a href="https://git.high5.nl/deploy.pl/">deploy.pl</a>. Both the MAC address as well as the temporary password
+are generated by this script when needed. Here is one example how
+we generate the temporary password:</p>
+
+<pre><code>my $_pass = qx(jot -rcs &#39;&#39; 20 33 126);
+</code></pre>
+
+<p>We assign a MAC prefix per server and the last bits are allocated
+based on the VM number unless one is specified.</p>
+
+<pre><code>my $_mac = $vms{$vm_name}{&#39;mac&#39;} || $conf{&#39;conf&#39;}{&#39;MAC_PREFIX&#39;}
+    . &#34;:&#34; . $vms{$vm_name}{&#39;vm_number&#39;};
+</code></pre>
+
+<h2 id="sensorsd(8)">sensorsd(8)</h2>
+
+<p>To keep track of the hardware, especially disks, we are using
+<a href="https://man.openbsd.org/sensorsd.8">sensorsd(8)</a>. The configuration for the disks we are using in
+<a href="https://man.openbsd.org/sensorsd.conf.5">sensorsd.conf(5)</a> is as follows.</p>
+
+<pre><code>drive:command=&#47;etc&#47;sensorsd&#47;drive %t %n %2 %s
+</code></pre>
+
+<p>The drive script looks like:</p>
+
+<pre><code>#!&#47;bin&#47;sh
+echo &#34;Current raid state: ${1}${2} ${3} ${4}&#34; | mail -s &#34;$(hostname) \
+${1}${2} ${4}&#34; -r noreply@example.com admin@example.com
+</code></pre>
+
+<h2 id="SSHFP">SSHFP</h2>
+
+<p>All SSH fingerprints (<a href="https://en.wikipedia.org/wiki/SSHFP_record">SSHFP</a>) records of all the hosts are added to DNS.
+You can verify the SSH fingerprint by adding &#34;-o VerifyHostKeyDNS=yes&#34; to the ssh command.</p>
+
+<pre><code>$ ssh -o VerifyHostKeyDNS=yes server6.openbsd.amsterdam
+The authenticity of host &#39;server6.openbsd.amsterdam&#39; can&#39;t be established.
+ECDSA key fingerprint is SHA256:w3ZoL03eaY&#47;2xdRd&#47;7NvHHwfqIOjyv2O8xkvUnqEgps.
+Matching host key fingerprint found in DNS.
+Are you sure you want to continue connecting (yes&#47;no)? yes
+...
+server6$
+</code></pre>
+<p class="footer f7 mt4">
+&copy; 2018&ndash;2020 OpenBSD Amsterdam is a project of <a href="https://high5.nl/">High5!</a>
+</body>
+</html>

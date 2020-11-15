@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" class="dark-gray bg-white sans-serif lh-copy">
+<title>Using mosh (Mobile Shell) - OpenBSD Amsterdam</title>
+<meta charset="UTF-8">
+<meta name="generator" content="romanzolotarev.com/ssg">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="discountegg" content="OBSD-EGG-2020">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="stylesheet" href="/style.css">
+<body class="mw7 w-100 center pa3">
+<div class="cf">
+<div class="fl w-100 w-50-l w-50-m"><a href="/" title="OpenBSD Amsterdam Logo"><img class="w3 br-100" src="/images/logo.png" alt="OpenBSD Amsterdam Logo"></a></div>
+<div class="fl w-100 w-50-l w-50-m mt2 tr"><a href="servers.html">370 VMs deployed</a>&nbsp;&#x1F421;</div>
+</div>
+<h1 id="Using%20mosh%20(Mobile%20Shell)">Using mosh (Mobile Shell)</h1>
+
+<p>SSH waits for the server&#39;s reply before showing you your own typing. That can make for a lousy user interface. Mosh is different: it gives an instant response to typing, deleting, and line editing. It does this adaptively and works even in full-screen programs like emacs and vim. On a bad connection, outstanding predictions are underlined so you won&#39;t be misled.</p>
+
+<p>With <a href="https://mosh.org/">mosh</a> you can get rid of network lag.</p>
+
+<p>On your VM install mosh with:</p>
+
+<pre>
+# <b>pkg_add mosh</b>
+...
+</pre>
+
+<p>On the machine you are connecting from you also need <a href="https://mosh.org/">mosh</a> which you can download <a href="https://mosh.org/#getting">here</a>.
+When you connect to your VM with:</p>
+
+<pre>
+$ <b>mosh &lt;your_vm&gt;</b>
+</pre>
+
+<p>And you are greeted with an error like:</p>
+
+<pre>
+mosh-server needs a UTF-8 native locale to run.
+
+Unfortunately, the local environment ([no charset variables]) specifies
+the character set "US-ASCII",
+
+The client-supplied environment ([no charset variables]) specifies
+the character set "US-ASCII".
+
+LANG=
+LC_COLLATE="C"
+LC_CTYPE="C"
+LC_MONETARY="C"
+LC_NUMERIC="C"
+LC_TIME="C"
+LC_MESSAGES="C"
+LC_ALL=
+Connection closed.
+/usr/local/bin/mosh: Did not find mosh server startup message. (Have you installed mosh on your server?)
+</pre>
+
+<p>Make sure you add something like the following to your <code>.profile</code>:</p>
+
+<pre>
+export LC_CTYPE='en_US.UTF-8'
+</pre>
+<p class="footer f7 mt4">
+&copy; 2018&ndash;2020 OpenBSD Amsterdam is a project of <a href="https://high5.nl/">High5!</a>
+</body>
+</html>

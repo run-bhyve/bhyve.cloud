@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" id="bhyve-cloud">
+	<head>
+		<title>bhyve public vm hosting</title>
+		<meta charset="utf-8">
+		<link rel="icon" type="image/png" href="favicon.png">
+		<link rel="stylesheet" href="style.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	</head>
+	<body>
+	<header>
+	<!-- LOGO -->
+	<img src="images/logo.png" alt="bhyve.cloud">
+
+	<!-- DESCRIPTION -->
+	<b>bhyve.cloud</b> 
+		runs dedicated
+		<a href="https://wiki.freebsd.org/bhyve">bhyve</a>
+		servers to host
+		VMs with almost any OS: *BSD, Linux, Windows.
+
+	<!-- CONTENTS -->
+	<nav>
+	<h2>Our services</h2>
+	<ul>
+	<li><a href="#kubernetes">Kubernetes clusters</a></li>
+	<li>
+		<a href="#vm">Virtual machines</a>
+		<ul>
+			<li><a href="#windows">Windows</a></li>
+			<li><a href="#linux">Linux</a></li>
+			<li><a href="#bsd">BSD</a></li>
+			<li><a href="#android">Android</a></li>
+		</ul>
+	</li>
+	<li><a href="#vpn">VPN</a></li>
+	<li><a href="#zfs">ZFS cloud storage</a></li>
+	</ul>
+	</nav>
+</header>
+
+<main>
+<article>
+
+	<!-- KUBERNETES -->
+	<h2 id="kubernetes">Kubernetes</h2>
+	<p>
+		<img	style="width:40px;" 
+			src="https://raw.githubusercontent.com/kubernetes/kubernetes/master/logo/logo.svg"
+			alt="Kube!"
+			/>
+
+		<strong>Kubernetes clusters in five minutes with our
+			<a href="https://t.me/bhyve_bot">Telegram bot</a></strong>
+		(coming soon)
+	</p>
+
+	<!-- VMs -->
+	<h2 id="vm">Virtual machines</h2>
+
+	<p>We offer:</p>
+	<h3 id="windows">Windows&#174;</h3>
+	<img src="images/windows-desktop.png" style="width:80%;" alt="Windows desktop"/>
+	<p>Remote desktop for Windows&#174;-specific applications. No need to install Windows&#174; or virtualization software on your computer. All-in-cloud!</p>
+	
+	<h3 id="linux">Linux</h3>
+	<img src="https://www.kernel.org/theme/images/logos/tux.png" alt="Linux logo"/>
+	<p>Debian and Ubuntu&mdash;de-facto standard in IT industry!</p>
+	<p>Also available: CentOS, Arch, CoreOS, Fedora, OpenSuse and others.</p>
+
+	<div id="bsd"></div>
+	<h3 id="openbsd">OpenBSD</h3>
+	<img src="https://www.openbsd.org/images/puffy68.gif" alt="OpenBSD official banner"/>
+	<p>Try power and simplicity of world's most secure OS!</p>
+
+	<h3 id="freebsd">FreeBSD</h3>
+	<img	src="images/freebsd.png" style="width:50%;" alt="FreeBSD logo"/>
+	<p>Cheap FreeBSD Jails hosting with free dedicated ipv6 address.</p>
+
+	<h3 id="android">Android</h3>
+	<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Android_logo_2019.svg/687px-Android_logo_2019.svg.png" width="100" alt="Android logo"/>
+	<p>Use Android-only apps entirely in cloud; no more dependency on your phone!</p>
+
+	<h3 id="vpn">VPN</h3>
+	Be private and use any website without restrictions with modern WireGuard VPN.
+
+	<h2>Prices</h2>
+	<p>
+		$60 per year for Linux/*BSD VMs<br>
+		<b>512M</b> RAM, <b>50G</b> HDD
+		<br>
+		<b>+$10 &#47; year</b> for extra <b>512M</b> RAM<br>
+		<b>+$50 &#47; year</b> for extra <b>50G</b> HDD<br>
+		<br>
+	</p>
+	<p class="f7">
+	Dedicated <b>IPv4</b> on request.<br>
+	Dedicated <b>IPv6</b>&mdash;WIP<br>
+	Console access with <b>ssh</b>.<br>
+	Reverse DNS upon request.<br>
+	We accept PayPal and bank cards.
+	</p>
+	<p>
+	<strong>Contact</strong> your manager 
+	<a class="b link bg-yell black" href="mailto:egor@math.ru?subject=Book_VM">by email</a>
+	or 
+	<a href="https://t.me/aeifn/">via Telegram</a>. 
+	</p>
+
+	<h2>Services and projects under development</h2>
+	<ul>
+		<li>GPU-hosting for rendering</li>
+		<li id="zfs">ZFS cloud storage</li>
+	</ul>
+</article>
+
+</main>
+
+<footer class="footer f7 mt4">
+
+		2020&ndash;2021 bhyve.cloud project by
+		<a href="https://github.com/olevole">Oleg Ginzburg</a>,
+		<a href="https://github.com/aeifn">Egor Kuzmichev</a>,
+		<a href="https://github.com/bitcoin-software">Edgar Blazhevich</a> and
+		<a href="https://github.com/uburuntu">Ramzan Bekbulatov</a>.
+		<br>
+		Our project is <a href="https://github.com/run-bhyve">open source</a>.
+		<br>
+		Services are provided by: OOO &ldquo;MAG-MAS Technologies&ldquo;
+		<br>
+		ООО &laquo;МАГ-МАС Технологии&raquo; (ИНН 5003132974, ОГРН 1195027006448)
+		<br>
+		<img
+			src="https://www.artlebedev.com/made-in-russia/mark/vector/made-in-russia-sign-en.png"
+			alt="Made in Russia"
+			style="margin-top:5px;"
+			width="100" />
+</footer>
+</body>
+</html>

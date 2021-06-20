@@ -1,0 +1,78 @@
+/* LOGO */
+header img {
+      width: 10rem;
+      display: block;
+      margin-bottom: 20px; /* imitate paragraph after logo */
+}      
+
+/* TODO */
+button, input, optgroup, select, textarea {
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.15;
+  margin: 0;
+}
+
+html {
+  font-size: 16px;
+  margin-right: auto;
+  margin-left: auto;
+  padding-bottom:20px;
+  padding-top:20px;
+  font-family: sans-serif;
+}
+
+a, a:visited {
+  color: #C79100;
+}
+
+h1, h2, h3 {
+  margin-top: 3rem;
+}
+
+li {
+  padding: .125rem 0;
+}
+
+.bg-bunq {
+  background-color: #ff7c00;
+}
+
+.bg-oams {
+  background-color: #ec0000;
+}
+
+.bg-yell {
+  background-color: #ffc439;
+}
+
+.black, .black:visited, hover-black:hover {
+  color: #000;
+}
+
+.sans-serif {
+  font-family: sans-serif;
+}
+
+footer {
+	font-size: .7em;
+	margin-top:20px;
+}
+
+@media screen and (min-width: 30em) {
+	html {
+		width:100%;
+	}
+}
+
+@media screen and (min-width: 30em) and (max-width: 60em) {
+	html {
+		width:60%;
+	}
+}
+
+@media screen and (min-width: 60em) {
+	html {
+		width:60%;
+	}
+}

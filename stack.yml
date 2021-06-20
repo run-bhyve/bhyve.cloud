@@ -1,6 +1,0 @@
-version: '3.8'
-services:
-  site:
-    image: nginx
-    volumes:
-      - ./data:/usr/share/nginx/html
